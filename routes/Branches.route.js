@@ -1,8 +1,15 @@
 const express = require('express');
-const branches = express.Router();
-const controller = require('./../controllers/Branches.controllers');
+const Branches = express.Router();
+const controller = require('../controllers/Branches.controller')
 
-branches.get('/branch', controller.branchList);
-branches.post('/branch', controller.createBranch);
+Branches.get('/listBranch', controller.list);
 
-module.exports = branches;
+Branches.delete('/deleteBranch/:id', controller.delete);
+
+Branches.put('/updateBranch/:id', controller.update);
+
+Branches.post('/createBranch', controller.create);
+
+Branches.get('/searchBranch/:id', controller.search);
+
+module.exports = Branches;

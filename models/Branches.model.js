@@ -1,81 +1,129 @@
-const Sequelize = require('sequelize');
-const db = require('../configdb/configdb');
+var Sequelize = require("sequelize");
+const sequelize = require("../configdb/configdb");
 
-const Branches = db.define('branches', 
-{
+var branches = sequelize.define(
+  "branches",
+  {
     id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    name:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    name: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    address:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    address: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    hotline:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    hotline: {
+      type: Sequelize.STRING,
+      validate: {
+        len: [10, 10]
+      }
     },
-    bossName:{
-        type: Sequelize.STRING,
-        allowNull: false,
+
+    bossName: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    bossEmail:{
-        type: Sequelize.STRING,
-        allowNull: false,
+
+    bossEmail: {
+      type: Sequelize.STRING,
+
+      validate: {
+        isEmail: true,
+        max: 50
+      }
     },
-    bossPhone:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    bossPhone: {
+      type: Sequelize.STRING,
+      validate: {
+        len: [10, 20]
+      }
     },
-    staffName:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    staffName: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    staffEmail:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    staffEmail: {
+      type: Sequelize.STRING,
+      validate: {
+        isEmail: true,
+        max: 50
+      }
     },
-    staffPhone:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    staffPhone: {
+      type: Sequelize.STRING,
+      validate: {
+        len: [10, 20]
+      }
     },
-    receptionName:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    receptionName: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    receptionEmail:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    receptionEmail: {
+      type: Sequelize.STRING,
+      validate: {
+        isEmail: true,
+        max: 50
+      }
     },
-    receptionPhone:{
-        type: Sequelize.STRING,
-        allowNull: false,
+
+    receptionPhone: {
+      type: Sequelize.STRING,
+      validate: {
+        len: [10, 20]
+      }
     },
-    createdBy:{
-        type: Sequelize.STRING
+
+    createdBy: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    editedBy:{
-        type: Sequelize.STRING
+
+    editedBy: {
+      type: Sequelize.STRING,
+      validate: {
+        max: 50
+      }
     },
-    createdAt:{
-        type: Sequelize.DATE
+
+    createdAt: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW
     },
-    editedAt:{
-        type: Sequelize.DATE
+
+    editedAt: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW
     },
-    status:{
-        type: Sequelize.INTEGER
+
+    status: {
+      type: Sequelize.INTEGER,
+      validate: {
+        max: 1
+      }
     }
-},
-{
+  },
+
+  {
     timestamps: false
-    }
+  }
 );
 
-module.exports = Branches;
+module.exports = branches;
