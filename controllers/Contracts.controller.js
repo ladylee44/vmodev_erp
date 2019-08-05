@@ -99,6 +99,6 @@ module.exports.deleteContract = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log("Err Delete");
+      console.log("Err Delete" + err);
     });
 };

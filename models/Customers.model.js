@@ -1,8 +1,9 @@
 var Sequelize = require('sequelize');
-var connect = require('../configdb/configdb');
+var db = require('../configdb/configdb');
+const Services = require('./../models/Services.model');
 
-var customers = connect.define('customers',{
-    
+var Customers = db.define('customers',
+{    
     id: {
         type: Sequelize.STRING,
         primaryKey: true,
@@ -71,7 +72,30 @@ var customers = connect.define('customers',{
             max: 1
         }
     }
-}, {timestamps: false}
+}, 
+{
+    timestamps: false
+}
 );
 
-module.exports = customers;
+// Customers.associate = (models) => {
+//     Customers.belongsToMany(models.Services, 
+//         {
+//             through: models.Services_Customers, 
+//             foreignKey: 'customerID'
+//         });
+// }
+
+// Customers.belongsToMany(Services, {
+//     through: 'Services_Customers',
+//     foreignKey: 'customerID'
+// });
+
+Customers.associate = (models) => {
+    Services.belongsToMany(models.Customers, 
+        {
+            through: models.Services_Customers, 
+            foreignKey: 'customerID'
+        });
+}
+module.exports = Customers;

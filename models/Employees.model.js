@@ -22,15 +22,37 @@ const Employees = db.define('employees',
         allowNull: false,
     },
     dob: {      
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    gender:{
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     address:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    idCard: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: { 
+            len: [10, 12]
+        }
     },
     email:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            isEmail: true,
+            max: 50
+        }
     },
     role: {
+        type: Sequelize.STRING
+    },
+    imageUrl:{
         type: Sequelize.STRING
     },
     createdBy: {
@@ -55,4 +77,7 @@ const Employees = db.define('employees',
     timestamps: false
 });
 
+Employees.belongsTo(Branches,{
+    foreignKey: 'branchID'
+});
 module.exports = Employees;

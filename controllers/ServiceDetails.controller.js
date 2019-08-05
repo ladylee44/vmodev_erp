@@ -9,7 +9,7 @@ module.exports.findServiceDetails = (req, res, next) =>{
             attributes: ['name', 'description']
         }],
         where:{
-            id: req.params.serviceid
+            serviceID: req.params.serviceid
         }
     })
     .then(serviceDetails=>{
@@ -22,7 +22,7 @@ module.exports.findServiceDetails = (req, res, next) =>{
             res.status(404).json({
                 status: 404,
                 msg: 'Service not found'
-            })
+            });
             console.log('Service not found')
         }
     })

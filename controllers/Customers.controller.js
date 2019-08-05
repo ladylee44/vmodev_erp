@@ -1,13 +1,16 @@
 const express = require("express");
-const customer = require("../models/Customers.model");
+const Customer = require("../models/Customers.model");
 
 module.exports = {
   //show list of customer
   list: (req, res, next) => {
-    customer
+    Customer
       .findAll()
       .then(customer => {
-        res.send(customer);
+        res.status(200).json({
+          status: 200,
+          customer: customer
+        });
       })
       .catch(err => {
         res.send(err);
@@ -18,7 +21,7 @@ module.exports = {
   delete: (req, res, next) => {
     var id = req.params.id;
 
-    customer
+    Customer
       .destroy({
         where: {
           id: id
@@ -40,7 +43,7 @@ module.exports = {
   // show detail a customer by ID
   search: (req, res, next) => {
     var id = req.params.id;
-    customer
+    Customer
       .findOne({
         where: { id: id }
       })
@@ -51,7 +54,8 @@ module.exports = {
           });
         } else {
           res.json({
-            detail
+            status: 200,
+            customer: detail
           });
         }
       })
@@ -74,7 +78,7 @@ module.exports = {
       status: req.body.status
     };
 
-    customer
+    Customer
       .create(newCustomer)
       .then(result => {
         res.json({
@@ -101,7 +105,7 @@ module.exports = {
       status: req.body.status
     };
 
-    customer
+    Customer
       .update(updateCustomer, {
         where: { id: id }
       })

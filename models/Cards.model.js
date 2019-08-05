@@ -1,8 +1,8 @@
 var Sequelize = require('sequelize');
-var connect = require('../configdb/configdb');
+var db = require('../configdb/configdb');
 var customer = require('./Customers.model')
 
-var card = connect.define('cards',{
+var card = db.define('cards',{
     
     id: {
         type: Sequelize.STRING,

@@ -1,7 +1,7 @@
 var Sequelize = require("sequelize");
 const sequelize = require("../configdb/configdb");
 
-var branches = sequelize.define(
+var Branches = sequelize.define(
   "branches",
   {
     id: {
@@ -126,4 +126,4 @@ var branches = sequelize.define(
   }
 );
 
-module.exports = branches;
+module.exports = Branches;

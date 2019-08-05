@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../configdb/configdb');
-const Branches = require('./Branches.model');
+const Branches = require('./../models/Branches.model');
+const Customers = require('./../models/Customers.model');
 
 const Services = db.define('services',
 {
@@ -43,10 +44,18 @@ const Services = db.define('services',
 },
 {
     timestamps: false
-})
+});
 
 Services.belongsTo(Branches,{
     foreignKey: 'branchID'
 });
+
+Services.associate = (models) => {
+    Services.belongsToMany(models.Customers, 
+        {
+            through: models.Services_Customers, 
+            foreignKey: 'serviceID'
+        });
+}
 
 module.exports = Services;

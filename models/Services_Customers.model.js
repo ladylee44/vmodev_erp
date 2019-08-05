@@ -53,6 +53,28 @@ const Services_Customers = db.define('services_customers',
     }
 },
 {
-    timestamp: false
+    timestamps: false
 });
 
+Services_Customers.belongsTo(Services, {
+    foreignKey: 'serviceID'
+});
+
+Services_Customers.belongsTo(Customers, {
+    foreignKey: 'customerID'
+});
+
+Services_Customers.belongsTo(Employees,{
+    foreignKey: 'employeeID'
+});
+
+// Services_Customers.associate = (models)=>{
+//     Services_Customers.belongsTo(models.Services, {
+//         foreignKey: 'serviceID'
+//     })
+//     Services_Customers.belongsTo(models.Customers,{
+//         foreignKey: 'customerID'
+//     })
+// }
+
+module.exports = Services_Customers;

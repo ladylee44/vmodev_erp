@@ -1,4 +1,6 @@
 const Services = require('../models/Services.model');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 // List services
 module.exports.listServices = (req, res, next)=>{
@@ -45,6 +47,39 @@ module.exports.findService = (req, res, next)=>{
             status: 400,
             msg: err
         })
+    })
+}
+
+//find by name 
+module.exports.searchServicesByName = (req, res,next)=>{
+    const name = req.body.name;
+    Services.findAll({
+        where:[{
+            name: {
+                [Op.like]:'%' + name + '%'
+            }
+        }]
+    })
+    .then(results=>{
+        if(results.length != 0){
+            // console.log(results)
+            res.status(200).json({
+                status: 200,
+                results:results
+            })
+        } else {
+            res.status(404).json({
+                status: 404,
+                msg: 'No result'
+            })
+        }
+    })
+    .catch(err=>{
+        res.status(400).json({
+            status: 400,
+            msg: 'Cannot find employee '
+        })
+        console.log('Can not find employee: ' + err)
     })
 }
 
