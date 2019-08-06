@@ -1,5 +1,7 @@
 const express = require("express");
 const branches = require("../models/Branches.model");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 module.exports = {
   //show list branch
@@ -21,11 +23,11 @@ module.exports = {
       .then(branches => {
         if (branches) {
           res.json({
-            message: "Delete success"
+            message: "Delete success branch at ID "+id
           });
         } else {
           res.json({
-            message: "ID is not existed"
+            message: "ID of branch is not existed"
           });
         }
       })
@@ -113,7 +115,7 @@ module.exports = {
         }
       })
       .catch(err => {
-        console.log("Failed to create new branch " + err);
+        res.send("Failed to create new branch \n" + err);
       });
   },
 
@@ -136,5 +138,29 @@ module.exports = {
       .catch(err => {
         res.send("Error in search branch " + err);
       });
+  },
+
+  //search branch by name
+  searchByName: (req, res, next)=>{
+    var name = req.body.name;
+    branches.findAll({
+      where:{
+        name: {
+          [Op.like]: '%'+name+'%'
+        }
+      }
+    })
+    .then(result =>{
+      const count = result.length
+      res.json({
+        message: 'found '+count+' result',
+        branchMatch: result
+      })
+    })
+    .catch(err=>{
+      res.json({
+        message: 'Error '+err
+      })
+    })
   }
 };
