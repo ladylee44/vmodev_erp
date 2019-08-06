@@ -2,11 +2,11 @@ const express = require('express');
 const employees = express.Router();
 const controller = require('./../controllers/Employees.controllers');
 
-employees.get('/employee', controller.employeeList);
-employees.get('/employee/findByID/:employeeid', controller.findEmployee);
+employees.get('/employee/listEmployee', controller.employeeList);
+employees.get('/employee/listEmployee/:employeeid', controller.findEmployee);
 employees.get('/employee/searchEmployee', controller.searchEmployeesByName);
-employees.post('/employee', controller.addEmployee);
-employees.put('/employee/:employeeid', controller.updateEmployee);
-employees.delete('/employee/:employeeid', controller.deleteEmployee);
+employees.post('/employee/createEmployee', controller.addEmployee);
+employees.put('/employee/updateEmployee/:employeeid', controller.updateEmployee);
+employees.delete('/employee/deleteEmployee/:employeeid', controller.deleteEmployee);
 
 module.exports = employees;

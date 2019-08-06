@@ -41,10 +41,11 @@ module.exports.employeeList = (req, res, next) => {
           }
         });
       // console.log(arr);
-        res.status(200).json({
-          status: 200,
-          listEmployee: arrEmpl
-        });
+        // res.status(200).json({
+        //   status: 200,
+        //   listEmployee: arrEmpl
+        // });
+        res.status(200).send(arrEmpl);
     })
     .catch(err => {
       res.send("Error listing err: " + err);
@@ -91,6 +92,7 @@ module.exports.findEmployee = (req, res, next) => {
     })
     .catch(err => {
       res.send("Cannot find employee: " + err);
+      console.log('Cannot find employee');
     });
 };
 
@@ -118,10 +120,12 @@ module.exports.searchEmployeesByName = (req, res, next)=>{
     }
   })
   .catch(err=>{
-    res.status(400).json({
-      status: 400,
-      msg: 'Cannot find employee ' + err
-    })
+    // res.status(400).json({
+    //   status: 400,
+    //   msg: 'Cannot find employee '
+    // })
+    res.send('Cannot find employee: ' + err);
+    console.log('Cannot find employee: ' + err);
   })
 }
 // add new employee
