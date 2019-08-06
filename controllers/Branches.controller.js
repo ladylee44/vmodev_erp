@@ -142,7 +142,7 @@ module.exports = {
 
   //search branch by name
   searchByName: (req, res, next)=>{
-    var name = req.body.name;
+    var name = req.params.name;
     branches.findAll({
       where:{
         name: {

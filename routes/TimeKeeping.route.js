@@ -2,7 +2,7 @@ const express = require('express');
 const timekeeping = express.Router();
 const controller = require('./../controllers/TimeKeeping.controller');
 
-timekeeping.get('/timekeeping/listTimekeeping', controller.list);
+timekeeping.get('/timekeeping/list', controller.list);
 
 timekeeping.get('/timekeeping/listByMonth', controller.listByDate);
 

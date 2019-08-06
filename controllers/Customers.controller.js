@@ -64,7 +64,7 @@ module.exports = {
   
   //search customer by name
   searchByName: (req, res, next) => {
-    var name = req.body.name;
+    var name = req.params.name;
     // console.log(name);
     customer
     .findAll({
@@ -81,8 +81,8 @@ module.exports = {
           message: "Cannot find!"
         });
       } else {
-        res.json({
-          message: 'Find '+ count+ ' result',
+        res.status(200).json({
+          // message: 'Find '+ count+ ' result',
           customerMatch: detail
         });
       }
