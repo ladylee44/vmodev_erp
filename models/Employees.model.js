@@ -54,7 +54,7 @@ const Employees = db.define('employees',
     },
     imageUrl:{
         type: Sequelize.STRING
-    },
+    }, 
     createdBy: {
         type: Sequelize.STRING
     },
@@ -63,7 +63,7 @@ const Employees = db.define('employees',
     },
     createdAt: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW  
     },
     editedAt: {
         type: Sequelize.DATE,

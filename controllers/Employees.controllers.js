@@ -2,7 +2,16 @@ const Employees = require("../models/Employees.model");
 const Branches = require('./../models/Branches.model');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+
+// employees.get('/employee', controller.employeeList);
+// employees.get('/employee/findByID/:employeeid', controller.findEmployee);
+// employees.get('/employee/searchEmployee', controller.searchEmployeesByName);
+// employees.post('/employee', controller.addEmployee);
+// employees.put('/employee/:employeeid', controller.updateEmployee);
+// employees.delete('/employee/:employeeid', controller.deleteEmployee);
+
 // list employees
+// json example
 module.exports.employeeList = (req, res, next) => {
   console.log("List Employees");
   Employees.findAll({
@@ -20,7 +29,8 @@ module.exports.employeeList = (req, res, next) => {
             dob: empl.dob,
             gender: empl.gender,
             address: empl.address,
-            email: empl.email,
+            idCard: empl.idCard, 
+            email: empl.email, 
             role: empl.role,
             imageUrl: empl.imageUrl,
             createdBy: empl.createdBy,
@@ -37,7 +47,7 @@ module.exports.employeeList = (req, res, next) => {
         });
     })
     .catch(err => {
-      res.send("Error listing err" + err);
+      res.send("Error listing err: " + err);
     });
 };
 // find employee by ID
@@ -61,8 +71,9 @@ module.exports.findEmployee = (req, res, next) => {
             branch: empl['branch'].name,
             name: empl['name'],
             dob: empl['dob'],
-            gender: empl['gender'],
+            gender: empl['gender'], 
             address: empl['address'],
+            idCard: empl['idCard'], 
             email: empl['email'],
             role: empl['role'],
             imageUrl: empl['imageUrl'],
@@ -79,7 +90,7 @@ module.exports.findEmployee = (req, res, next) => {
       }
     })
     .catch(err => {
-      res.send("Err " + err);
+      res.send("Cannot find employee: " + err);
     });
 };
 
@@ -135,13 +146,14 @@ module.exports.addEmployee = (req, res, next) => {
 
   Employees.create(newEmpl)
     .then(newEmpl => {
-      res.status(200).json({
-        status: 200,
+      res.status(201).json({
+        status: 201,
         newEmployee: newEmpl
       });
     })
     .catch(err => {
       console.log("Cannot add new employee: " + err);
+      res.send("Cannot add new employee: " + err);
     });
 };
 
@@ -170,13 +182,14 @@ module.exports.updateEmployee = (req, res, next) => {
     }
   })
     .then(() => {
-      res.status(200).json({
-        status: 200,
+      res.status(201).json({
+        status: 201,
         updateEmployee: updateEmployee
       });
     })
-    .catch(() => {
+    .catch(err => {
       console.log("Error updating");
+      res.send("Cannot update employee: " + err);
     });
 };
 
@@ -195,39 +208,7 @@ module.exports.deleteEmployee = (req, res, next) => {
     })
     .catch(err => {
       console.log("Error Delete");
+      res.send('Cannot delete employee' + err);
     });
 };
-
-// module.exports.updateEmployee = (req, res, next)=>{
-//         const updateEmployee = {
-//         branch_id: req.body.branchID,
-//         name: req.body.name,
-//         dob: req.body.dob,
-//         address: req.body.address,
-//         email: req.body.email,
-//         role: req.body.role,
-//         createdBy: req.body.createdBy,
-//         editedBy: req.body.editedBy,
-//         createdAt: req.body.createdAt,
-//         editedAt: req.body.editedAt,
-//         status: req.body.status
-//     }
-//     Employees.findOne({
-//         where: {
-//             id: req.params.employeeid
-//         }
-//     })
-//     .then(empl=>{
-//         if(empl){
-//             empl
-//             .update(updateEmployee)
-//             .then(updateEmployee=>{
-//                 res.status(200).json({
-//                     status: 200,
-//                     updateEmployee: updateEmployee
-//                 })
-//             })
-//         }
-//     })
-// }
 

@@ -2,6 +2,13 @@ const Services = require('../models/Services.model');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
+// services.get('/services', controller.listServices);
+
+
+
+// services.put('/services/:serviceid', controller.updateService);
+// services.delete('/services/:serviceid', controller.deleteService);
+
 // List services
 module.exports.listServices = (req, res, next)=>{
     console.log('List service');
@@ -13,14 +20,16 @@ module.exports.listServices = (req, res, next)=>{
             })
         })
         .catch(err=>{
-            res.status(400).json({
-                status: 400,
-                msg: 'Err listing service'
-            })
+            // res.status(400).json({
+            //     status: 400,
+            //     msg: 'Err listing service'
+            // })
             console.log(err);
+            res.send('Err listing service: ' + err);
         })
 }
 
+// services.get('/services/findByID/:serviceid', controller.findService);
 // List services by ID
 module.exports.findService = (req, res, next)=>{
     console.log('Find Service by ID');
@@ -43,13 +52,16 @@ module.exports.findService = (req, res, next)=>{
         }
     })
     .catch(err=>{
-        res.status(400).json({
-            status: 400,
-            msg: err
-        })
+        // res.status(400).json({
+        //     status: 400,
+        //     msg: err
+        // })
+        console.log('Cannot find service by ID: ' + err);
+        res.send('Cannot find service by ID: ' + err);
     })
 }
 
+// services.get('/services/searchServices', controller.searchServicesByName);
 //find by name 
 module.exports.searchServicesByName = (req, res,next)=>{
     const name = req.body.name;
@@ -75,14 +87,17 @@ module.exports.searchServicesByName = (req, res,next)=>{
         }
     })
     .catch(err=>{
-        res.status(400).json({
-            status: 400,
-            msg: 'Cannot find employee '
-        })
-        console.log('Can not find employee: ' + err)
+        // res.status(400).json({
+        //     status: 400,
+        //     msg: 'Cannot find employee '
+        // })
+        console.log('Can not find employee: ' + err);
+        res.send('Cannot search service: ' + err);
     })
 }
 
+// services.post('/services', controller.addService);
+// create new service
 module.exports.addService = (req, res, next)=>{
     console.log('Add new service');
     const newService = {
@@ -98,17 +113,18 @@ module.exports.addService = (req, res, next)=>{
 
     Services.create(newService)
         .then(newService=>{
-            res.status(200).json({
-                status: 200,
+            res.status(201).json({
+                status: 201,
                 newService: newService
             })
         })
         .catch(err=>{
-            res.status(400).json({
-                status: 400,
-                msg: 'Cannot create new service' 
-            });
+            // res.status(400).json({
+            //     status: 400,
+            //     msg: 'Cannot create new service' 
+            // });
             console.log("Err: " + err);
+            res.send('Cannot create new service: ' + err);
         })
 }
 
@@ -132,8 +148,8 @@ module.exports.updateService = (req, res, next)=>{
     })
     .then(service=>{
         if(service){
-            res.status(200).json({
-                status: 200,
+            res.status(201).json({
+                status: 201,
                 updateService: updateService
             })
         }else{
@@ -150,6 +166,7 @@ module.exports.updateService = (req, res, next)=>{
             msg: 'Cannot update service'
         })
         console.log(err);
+        res.send('Cannot update service: ' + err);
     })
 }
 
@@ -176,10 +193,11 @@ module.exports.deleteService = (req, res, next)=>{
         }
     })
     .catch(err=>{
-        res.status(400).json({
-            status: 400,
-            msg: 'Cannot delete service'
-        });
-        console.log("Err: " + err)
+        // res.status(400).json({
+        //     status: 400,
+        //     msg: 'Cannot delete service'
+        // });
+        console.log("Err: " + err);
+        res.send('Cannot delete service: ' + err);
     })
 }

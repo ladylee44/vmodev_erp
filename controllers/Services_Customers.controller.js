@@ -4,6 +4,10 @@ const Services = require('./../models/Services.model');
 const Customers = require('../models/Customers.model');
 const ServiceDetails = require('./../models/ServiceDetails.model');
 
+// services_customers.get('/services_customers/:service_customer_id', controller.findSerCus);
+// services_customers.post('/services_customers', controller.createSerCus);
+// services_customers.put('/services_customers/:service_customer_id', controller.updateSerCus);
+
 //  Service Customer 
 module.exports.findSerCus = (req, res, next)=>{
     console.log('Services Customers');
@@ -36,11 +40,12 @@ module.exports.findSerCus = (req, res, next)=>{
         }
     })
     .catch(err=>{
-        res.status(400).json({
-            status: 400,
-            msg: 'Cannot search service customer'
-        });
+        // res.status(400).json({
+        //     status: 400,
+        //     msg: 'Cannot search service customer'
+        // });
         console.log('Err: ' + err);
+        res.send('Cannot find service-customer: ' + err);
     })
 }
 
@@ -81,8 +86,8 @@ module.exports.createSerCus = (req, res, next)=>{
         ServicesCustomers.create(newServiceCustomer)
             .then(newServiceCustomer=>{
                 if(newServiceCustomer){
-                    res.status(200).json({
-                        status: 200,
+                    res.status(201).json({
+                        status: 201,
                         newServiceCustomer: newServiceCustomer
                     })
                 }
@@ -97,6 +102,7 @@ module.exports.createSerCus = (req, res, next)=>{
     })
     .catch(err=>{
         console.log('Err: ' +  err);
+        res.send('Cannot create new service-customer: ' + err);
     })
 };
 
@@ -116,9 +122,9 @@ module.exports.updateSerCus = (req, res, next)=>{
                 performPrice: ser.performPrice
             }
         });
-        console.log(result.materialPrice);
-        console.log(result.customerPay);
-        console.log(result.performPrice);
+        // console.log(result.materialPrice);
+        // console.log(result.customerPay);
+        // console.log(result.performPrice);
 
         const updateServiceCustomer = {
             serviceID: req.body.serviceID,
@@ -138,8 +144,8 @@ module.exports.updateSerCus = (req, res, next)=>{
             }
         })
             .then(()=>{
-                res.status(200).json({
-                    status: 200,
+                res.status(201).json({
+                    status: 201,
                     updateServiceCustomer: updateServiceCustomer
                 })
             })
@@ -153,6 +159,7 @@ module.exports.updateSerCus = (req, res, next)=>{
     })
     .catch(err=>{
         console.log('Err: ' +  err);
+        res.send('Cannot update service-customer: ' + err);
     })
 }
 
@@ -171,5 +178,6 @@ module.exports.deleteSerCus = (req, res, next)=>{
     })
     .catch(err=>{
         console.log('Err delete' + err);
+        res.send('Cannot delete service-customer: ' + err);
     });
 };

@@ -1,69 +1,95 @@
 const express = require("express");
-const Customer = require("../models/Customers.model");
+const customer = require("../models/Customers.model");
+const Sequelize= require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   //show list of customer
   list: (req, res, next) => {
-    Customer
-      .findAll()
-      .then(customer => {
-        res.status(200).json({
-          status: 200,
-          customer: customer
-        });
-      })
-      .catch(err => {
-        res.send(err);
-      });
+    customer
+    .findAll()
+    .then(customer => {
+      res.send(customer);
+    })
+    .catch(err => {
+      res.send(err);
+    });
   },
-
+  
   // delete customer by ID
   delete: (req, res, next) => {
     var id = req.params.id;
-
-    Customer
-      .destroy({
-        where: {
-          id: id
-        }
-      })
-      .then(data => {
-        res.json({
-          message: "Delete customer by id success",
-          data
-        });
-      })
-      .catch(err => {
-        res.json({
-          message: "Error in delete customer by id " + err
-        });
+    
+    customer
+    .destroy({
+      where: {
+        id: id
+      }
+    })
+    .then(data => {
+      res.json({
+        message: "Delete customer by id success",
+        data
       });
+    })
+    .catch(err => {
+      res.json({
+        message: "Error in delete customer by id " + err
+      });
+    });
   },
-
+  
   // show detail a customer by ID
   search: (req, res, next) => {
     var id = req.params.id;
-    Customer
-      .findOne({
-        where: { id: id }
-      })
-      .then(detail => {
-        if (!detail) {
-          res.json({
-            message: "ID of customer is not existed, please re-enter"
-          });
-        } else {
-          res.json({
-            status: 200,
-            customer: detail
-          });
-        }
-      })
-      .catch(err => {
-        res.send(err);
-      });
+    customer
+    .findOne({
+      where: { id: id }
+    })
+    .then(detail => {
+      if (!detail) {
+        res.json({
+          message: "ID of customer is not existed, please re-enter"
+        });
+      } else {
+        res.json({
+          detail
+        });
+      }
+    })
+    .catch(err => {
+      res.send(err);
+    });
   },
-
+  
+  //search customer by name
+  searchByName: (req, res, next) => {
+    var name = req.body.name;
+    // console.log(name);
+    customer
+    .findAll({
+      where: { 
+        name: {
+          [Op.like]: '%'+name+'%'
+        }
+      }
+    })
+    .then(detail => {
+      if (!detail) {
+        res.json({
+          message: "Cannot find!"
+        });
+      } else {
+        res.json({
+          detail
+        });
+      }
+    })
+    .catch(err => {
+      res.send(err);
+    });
+  },
+  
   // create a new customer
   create: (req, res, next) => {
     var newCustomer = {
@@ -77,8 +103,8 @@ module.exports = {
       editedBy: req.body.editedBy,
       status: req.body.status
     };
-
-    Customer
+    if (customer) {
+      customer
       .create(newCustomer)
       .then(result => {
         res.json({
@@ -88,8 +114,11 @@ module.exports = {
       .catch(err => {
         res.send("Error in create new customer " + err);
       });
+    }else{
+      res.json('Invalid information of customer, please try again!')
+    }
   },
-
+  
   // update a customer by ID
   update: (req, res, next) => {
     var id = req.params.id;
@@ -104,22 +133,40 @@ module.exports = {
       editedBy: req.body.editedBy,
       status: req.body.status
     };
-
-    Customer
-      .update(updateCustomer, {
-        where: { id: id }
-      })
-      .then(result => {
-        if (result) {
-          res.json("Update success");
-        } else {
-          res.json("Failed to update");
-        }
-      })
-      .catch(err => {
-        res.json({
-          message: "Error in update customer" + err
-        });
+    
+    customer
+    .update(updateCustomer, {
+      where: { id: id }
+    })
+    .then(result => {
+      if (result) {
+        res.json("Update success");
+      } else {
+        res.json("Failed to update");
+      }
+    })
+    .catch(err => {
+      res.json({
+        message: "Error in update customer" + err
       });
+    });
+  },
+  
+  //pagination
+  pagination : (req, res, next)=>{
+    var page = parseInt(req.params.page);
+    var result = parseInt((page-1)*5);
+    
+    customer.findAll({offset: result, limit: 5})
+    .then(data =>{
+      res.json({
+        customer: data
+      });
+    })
+    .catch(err=>{
+      res.json({
+        message: 'Error: '+err
+      })
+    });
   }
 };
