@@ -169,11 +169,11 @@ module.exports = {
           });
         },
         
-        listOfDay: (req, res,  next)=>{
+        listByDay: (req, res,  next)=>{
           var day = req.body.day;
           var sql = 
           "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut, timekeepings.workTime, timekeepings.dayOff " +
-          "FROM timekeepings, employees, branches " +
+          "FROM timekeepings, employees, branches " 
           "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '"+ day+"'";
           db.query(sql, {type: db.QueryTypes.SELECT})
           .then(result=>{
@@ -188,9 +188,6 @@ module.exports = {
           var newTimekeeping = {
             employeeID: req.body.employeeID,
             branchOfEmployee: req.body.branchOfEmployee,
-            // date: req.body.date,
-            // checkIn: req.body.checkIn,
-            // checkOut: req.body.checkOut,
           }
           timekeepings.create(newTimekeeping)
           .then(result=>{
@@ -208,17 +205,17 @@ module.exports = {
           .catch(err=>{
             res.send('Error: '+ err)
           })
-        },
-
-        listByMonth: (req, res, next)=>{
-          
-          var sql = "SELECT employees.name, timekeepings.checkIn, timekeepings.checkOut"+
-          " FROM timekeepings, employees"+
-          " WHERE timekeepings.employeeID =employees.id GROUP BY timekeepings.date";
-
-          // db.query(sql, {type: })
-          
         }
+
+        // listByMonth: (req, res, next)=>{
+          
+        //   var sql = "SELECT employees.name, timekeepings.checkIn, timekeepings.checkOut"+
+        //   " FROM timekeepings, employees"+
+        //   " WHERE timekeepings.employeeID =employees.id GROUP BY timekeepings.date";
+
+        //   // db.query(sql, {type: })
+          
+        // }
 
         
       };

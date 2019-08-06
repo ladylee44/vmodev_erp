@@ -2,19 +2,19 @@ const express = require('express');
 const customer = express.Router();
 const controller = require('../controllers/Customers.controller');
 
-customer.get('/listCustomer', controller.list);
+customer.get('/customer/listCustomer', controller.list);
 
-customer.delete('/deleteCustomer/:id', controller.delete);
+customer.delete('/customer/deleteCustomer/:id', controller.delete);
 
-customer.get('/searchCustomer/:id', controller.search);
+// customer.get('/customer/searchCustomer/:id', controller.search);
 
-customer.get('/searchCustomerByName', controller.searchByName)
+customer.get('/customer/search', controller.searchByName)
 
-customer.post('/createCustomer', controller.create);
+customer.post('/customer/createCustomer', controller.create);
 
-customer.put('/updateCustomer/:id', controller.update);
+customer.put('/customer/updateCustomer/:id', controller.update);
 
-customer.get('/pagination/:page', controller.pagination);
+customer.get('/customer/pagination/:page', controller.pagination);
 
 
 module.exports = customer

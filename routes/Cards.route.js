@@ -2,14 +2,14 @@ const express = require('express');
 const card = express.Router();
 const controller = require('../controllers/Cards.controller');
 
-card.get('/listCard', controller.list);
+card.get('/card/listCard', controller.list);
 
-card.get('/searchCard/:id', controller.search);
+card.get('/card/search/:id', controller.search);
 
-card.post('/createCard', controller.create);
+card.post('/card/createCard', controller.create);
 
-card.put('/updateCard/:id', controller.update)
+card.put('/card/updateCard/:id', controller.update)
 
-card.delete('/deleteCard/:id', controller.delete)
+card.delete('/card/deleteCard/:id', controller.delete)
 
 module.exports = card;

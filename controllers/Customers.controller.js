@@ -75,13 +75,15 @@ module.exports = {
       }
     })
     .then(detail => {
+      const count = detail.length
       if (!detail) {
         res.json({
           message: "Cannot find!"
         });
       } else {
         res.json({
-          detail
+          message: 'Find '+ count+ ' result',
+          customerMatch: detail
         });
       }
     })
