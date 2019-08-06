@@ -217,8 +217,6 @@ module.exports = {
           " WHERE timekeepings.employeeID =employees.id GROUP BY timekeepings.date";
 
           // db.query(sql, {type: })
-          
         }
-
-        
       };
+
