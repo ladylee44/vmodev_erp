@@ -186,8 +186,8 @@ module.exports.updateEmployee = (req, res, next) => {
     }
   })
     .then(() => {
-      res.status(201).json({
-        status: 201,
+      res.status(200).json({
+        status: 200,
         updateEmployee: updateEmployee
       });
     })
@@ -213,6 +213,21 @@ module.exports.deleteEmployee = (req, res, next) => {
     .catch(err => {
       console.log("Error Delete");
       res.send('Cannot delete employee' + err);
-    });
+    });j
 };
 
+// pagination
+module.exports.pagination = (req, res, next)=>{
+  var page = parseInt(req.params.page);
+  var result = parseInt((page-1)*5);
+  
+  Employees.findAll({offset: result, limit: 10})
+  .then(data =>{
+      res.json({
+      employee: data
+      });
+  })
+  .catch(err=>{
+      res.send('Err: ' +err);
+  });
+}

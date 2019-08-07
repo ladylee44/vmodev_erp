@@ -27,10 +27,13 @@ app.use('/erp', timekeepingRoute);
 const serviceDetailsRoute = require('./routes/ServiceDetails.route');
 app.use('/erp/', serviceDetailsRoute);
 
-const service_customer = require('./routes/Services_Customers.route');
+const service_customer = require('./routes/ServicesCustomers.route');
 app.use('/erp/', service_customer);
 
 const serviceRoute = require('./routes/Services.route');
 app.use('/erp', serviceRoute);
+
+const salaryRoute = require('./routes/Salaries.route');
+app.use('/erp/', salaryRoute);
 
 module.exports = app;

@@ -80,4 +80,5 @@ const Employees = db.define('employees',
 Employees.belongsTo(Branches,{
     foreignKey: 'branchID'
 });
+
 module.exports = Employees;

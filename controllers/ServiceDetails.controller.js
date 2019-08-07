@@ -1,17 +1,40 @@
 const ServiceDetails = require('../models/ServiceDetails.model');
 const Services = require('../models/Services.model');
 
-// serviceDetails.get('/service_details/:serviceid', controller.findServiceDetails);
-// serviceDetails.post('/service_details/', controller.createServiceDetails);
-// serviceDetails.put('/service_details/:servicedetails_id', controller.updateServiceDetails);
-// serviceDetails.delete('/service_details/:servicedetails_id', controller.deleteServiceDetails);
 
+module.exports.listServiceDetails = (req, res, next)=>{
+    console.log('List Service Details');
+    ServiceDetails.findAll({
+        include:[{
+            model: Services,
+            attributes: ['name', 'description', 'createdBy', 'editedBy', 'createdAt', 'editedAt', 'status']
+        }]
+    })
+    .then(serviceDetails=>{
+        if(serviceDetails){
+            res.status(200).json({
+                status: 200,
+                serviceDetails: serviceDetails
+            })
+        } else {
+            res.status(404).json({
+                status: 404,
+                msg: 'Service not found'
+            });
+            console.log('Service not found');
+        }
+    })
+    .catch(err=>{
+        console.log('Err' + err);
+        res.send("Cannot find service details: " +  err);
+    })
+}
 module.exports.findServiceDetails = (req, res, next) =>{
     console.log('Service Detail');
     ServiceDetails.findOne({
         include: [{
             model: Services,
-            attributes: ['name', 'description']
+            attributes: ['name', 'description', 'createdBy', 'editedBy', 'createdAt', 'editedAt', 'status']
         }],
         where:{
             serviceID: req.params.serviceid
@@ -46,11 +69,11 @@ module.exports.createServiceDetails = (req, res, next)=>{
     const newServiceDetails = {
         serviceID: req.body.serviceID,
         materialPrice: req.body.materialPrice,
-        customerPay: req.body.customerPay,
-        performPrice: req.body.performPrice
+        payToEmployee: req.body.payToEmployee,
+        customerPay: req.body.customerPay
     }
 
-    Services.create(newServiceDetails)
+    ServiceDetails.create(newServiceDetails)
         .then(newServiceDetails=>{
             if(newServiceDetails){
                 res.status(201).json({
@@ -73,17 +96,17 @@ module.exports.updateServiceDetails = (req, res, next)=>{
     const updateServiceDetails = {
         serviceID: req.body.serviceID,
         materialPrice: req.body.materialPrice,
-        customerPay: req.body.customerPay,
-        performPrice: req.body.performPrice
+        payToEmployee: req.body.payToEmployee,
+        customerPay: req.body.customerPay
     }
-    Services.update(updateServiceDetails,{
+    ServiceDetails.update(updateServiceDetails,{
         where: {
-            id: req.params.servicedetails_id
+            id: req.params.serviceDetailsID
         }
     })
     .then(()=>{
-        res.status(201).json({
-            status: 201,
+        res.status(200).json({
+            status: 200,
             updateServiceDetails: updateServiceDetails
         })
     })
@@ -95,9 +118,9 @@ module.exports.updateServiceDetails = (req, res, next)=>{
 
 module.exports.deleteServiceDetails = (req, res, next)=>{
     console.log('Deleting ...');
-    Services.destroy({
+    ServiceDetails.destroy({
         where: {
-            id: req.params.servicedetails_id
+            id: req.params.serviceDetailsID
         }
     })
     .then(()=>{

@@ -4,7 +4,7 @@ const Branches = require('./../models/Branches.model');
 const Customers = require('./../models/Customers.model');
 
 const Services = db.define('services',
-{
+{ 
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

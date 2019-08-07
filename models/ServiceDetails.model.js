@@ -20,10 +20,10 @@ const ServiceDetails = db.define('service_details',
     materialPrice:{
         type: Sequelize.INTEGER
     }, 
-    customerPay: {
+    payToEmployee: {
         type: Sequelize.INTEGER
     },
-    performPrice: {
+    customerPay: {
         type: Sequelize.INTEGER
     }
 }, 
