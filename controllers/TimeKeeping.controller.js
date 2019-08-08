@@ -1,13 +1,13 @@
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const timekeepings = require("../models/TimeKeepings.model");
+const employees = require("../models/Employees.model");
 const db = require("../configdb/configdb");
 
 module.exports = {
   
   list: (req, res, next) => {
-    timekeepings
-    .findAll()
+    timekeepings.findAll()
     .then(data => {
       // console.log(data)
       const response = {
@@ -18,36 +18,19 @@ module.exports = {
           var check_in = result.checkIn;
           var check_out = result.checkOut;
           
-          // console.log(check_in);
-          // console.log(check_out);
+          
           
           var hour_in =check_in.split(":",1);
           var hour_out = check_out.split(":", 1);
-          // console.log('hour-in: '+hour_in);
-          // console.log('hour-out: '+hour_out);
+          
           
           var min_in =check_in.split(':', 2)[1];
           var min_out =check_out.split(':', 2)[1];
-          // var min_out= check_out[1];
-          // console.log(check_out);
-          // //tách ngày/giờ
-          // var check_out = check_out.split(":", 2);
-          // var check_in = check_in.split(":", 2);
-          
-          // //lấy ngày
-          // var day_out = check_out[0];
-          // var day_in = check_in[0];
-          
-          // //lấy giờ/ phút
-          // var hour_out = parseInt(check_out[1].split(":", 1));
-          // var hour_in = parseInt(check_in[1].split(":", 1));
-          // var min_in = parseInt(check_in[1].split(":"));
-          // var min_out = parseInt(check_out[1].split(":"));
-          
           
           //thời gian làm việc
           var totalMin = 0;
           var totalHour = 0;
+          var workDay= 0
           if (min_in > min_out) {
             totalMin = 60 - min_in + 60 - min_out;
             totalHour = hour_out - hour_in - 1;
@@ -66,13 +49,16 @@ module.exports = {
           }
           
           //chấm 1 công/ nửa công
+          var workDay=5;
           if (totalHour < 4) {
-            var workDay = 0;
+            workDay = 0;
           } else if (totalHour == 4) {
-            var workDay = 0.5;
+            workDay = 0.5;
           } else {
-            var workDay = 1;
+            workDay = 1;
           }
+          
+          console.log(workDay)
           
           //chấm số ngày nghỉ
           var dayOff = 0;
@@ -82,7 +68,7 @@ module.exports = {
           
           timekeepings.update(
             {
-              dayOff: dayOff
+              numberWorkDay: workDay
             },
             {
               where: {
@@ -91,10 +77,9 @@ module.exports = {
             }
             );
             
-            //update thời gian làm việc lên db
             timekeepings.update(
               {
-                workTime: totalHour + totalMin / 60
+                dayOff: dayOff
               },
               {
                 where: {
@@ -103,121 +88,116 @@ module.exports = {
               }
               );
               
-              //tổng thời gian làm việc
-              var timeWorking = parseFloat(
-                (totalHour + totalMin / 60).toFixed(1)
+              //update thời gian làm việc lên db
+              timekeepings.update(
+                {
+                  workTime: totalHour + totalMin / 60
+                },
+                {
+                  where: {
+                    id: result.id
+                  }
+                }
                 );
                 
-                //trả về kết quả
-                
-                return {
-                  employeeID: result.employeeID,
-                  date: result.date,
-                  checkIn: result.checkIn,
-                  checkOut: result.checkOut,
-                  timeWorking: timeWorking,
-                  dayOff: dayOff,
-                  overTime: parseFloat(overTime.toFixed(1)),
-                  workDay: workDay
-                };
-              })
-            };
-            res.json({
-              Timekeeping: response
+                //tổng thời gian làm việc
+                var timeWorking = parseFloat(
+                  (totalHour + totalMin / 60).toFixed(1)
+                  );
+                  
+                  //trả về kết quả
+                  return {
+                    employeeID: result.employeeID,
+                    date: result.date,
+                    checkIn: result.checkIn,
+                    checkOut: result.checkOut,
+                    timeWorking: timeWorking,
+                    numberWorkDay: workDay,
+                    dayOff: dayOff,
+                    overTime: parseFloat(overTime.toFixed(1)),
+                  };
+                })
+              };
+              res.json({
+                Timekeeping: response
+              });
+            })
+            .catch(err => {
+              res.json({
+                message: "Error: " + err
+              });
             });
-          })
-          .catch(err => {
-            res.json({
-              message: "Error: " + err
-            });
-          });
-        },
-        
-        listByDate: (req, res, next) => {
-          var date_start= req.body.date_start;
-          var date_end = req.body.date_end
-          console.log(date_start);
-          // timekeepings
-          //   .findAll()
-          //   .then(data => {
-          //     const response = {
-          //       timekeepings: data.map(result1 => {
+          },
           
-          //         var date_start = req.body.date;
-          //         var date
-          //         var sql =
-          //         "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut " +
-          //         "FROM timekeepings, employees, branches " +
-          //         "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id ";
-          //         db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
-          //             console.log(result);
-          //             res.json({
-          //                 result
-          //             });
-          //         });
-          //       })
-          //     };
-          //   });
-          var sql =
-          "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut " +
-          "FROM timekeepings, employees, branches " +
-          "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND ( timekeepings.date BETWEEN '"+ date_start+"' AND '"+date_end+"')";
-          db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
-            res.json({
-              result
-            });
-          });
-        },
-        
-        listByDay: (req, res,  next)=>{
-          var day = req.body.day;
-          var sql = 
-          "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut, timekeepings.workTime, timekeepings.dayOff " +
-          "FROM timekeepings, employees, branches " 
-          "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '"+ day+"'";
-          db.query(sql, {type: db.QueryTypes.SELECT})
-          .then(result=>{
-            res.json({
-              day: day,
-              result
-            });
-          });
-        },
-        
-        createTimekeeping :(req, res, next)=>{
-          var newTimekeeping = {
-            employeeID: req.body.employeeID,
-            branchOfEmployee: req.body.branchOfEmployee,
-          }
-          timekeepings.create(newTimekeeping)
-          .then(result=>{
-            if(result){
+          listByDate: (req, res, next) => {
+            var date_start= req.body.date_start;
+            var date_end = req.body.date_end
+            // console.log(date_start);
+            
+            var sql =
+            "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut " +
+            "FROM timekeepings, employees, branches " +
+            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND ( timekeepings.date BETWEEN '"+ date_start+"' AND '"+date_end+"')";
+            db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
               res.json({
-                message: 'Create success',
-                timeKeeping: result
-              })
-            }else{
+                result
+              });
+            });
+          },
+          
+          listByDay: (req, res,  next)=>{
+            var day = req.body.day;
+            var sql = 
+            "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut, timekeepings.workTime, timekeepings.dayOff " +
+            "FROM timekeepings, employees, branches " 
+            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '"+ day+"'";
+            db.query(sql, {type: db.QueryTypes.SELECT})
+            .then(result=>{
               res.json({
-                message: "Error in create timekeeping"
-              })
+                name : SVGDefsElement,
+                date : [
+                  
+                ]
+                // day: day,
+                // result
+              });
+            });
+          },
+          
+          createTimekeeping :(req, res, next)=>{
+            var newTimekeeping = {
+              employeeID: req.body.employeeID,
+              branchOfEmployee: req.body.branchOfEmployee,
             }
-          })
-          .catch(err=>{
-            res.send('Error: '+ err)
-          })
-        }
-
-        // listByMonth: (req, res, next)=>{
+            timekeepings.create(newTimekeeping)
+            .then(result=>{
+              if(result){
+                res.json({
+                  message: 'Create success',
+                  timeKeeping: result
+                })
+              }else{
+                res.json({
+                  message: "Error in create timekeeping"
+                })
+              }
+            })
+            .catch(err=>{
+              res.send('Error: '+ err)
+            })
+          },
           
-        //   var sql = "SELECT employees.name, timekeepings.checkIn, timekeepings.checkOut"+
-        //   " FROM timekeepings, employees"+
-        //   " WHERE timekeepings.employeeID =employees.id GROUP BY timekeepings.date";
-
-
-        //   // db.query(sql, {type: })
-          
-        // }
-
+          listByMonth: (req, res, next)=>{
+            timekeepings.findAll()
+            .then(result=>{
+              const response = {
+                timekeepings: result.map(rs=>{
+                  timekeepings.findAll().then
+                })
+              };
+              res.send({data : response});
+            })
+          }
+        };
         
-      };
-
+        

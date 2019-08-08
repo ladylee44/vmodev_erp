@@ -3,16 +3,16 @@ const branches = express.Router();
 const controller = require('../controllers/Branches.controller')
 
 
-branches.get('/branch/listBranch', controller.list);
+branches.get('/branch/list', controller.list);
 
-branches.delete('/branch/deleteBranch/:id', controller.delete);
+branches.delete('/branch/delete/:id', controller.delete);
 
-branches.put('/branch/updateBranch/:id', controller.update);
+branches.put('/branch/update/:id', controller.update);
 
-branches.post('/branch/createBranch', controller.create);
+branches.post('/branch/create', controller.create);
 
 // Branches.get('/branch/searchBranch/:id', controller.search);
 
-branches.get('/branch/search', controller.searchByName);
+branches.get('/branch/search/:name', controller.searchByName);
 
 module.exports = branches;

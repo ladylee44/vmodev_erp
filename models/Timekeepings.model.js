@@ -17,6 +17,10 @@ const Timekeepings = db.define('timekeepings',
             key: 'id'
         }
     },
+    numberWorkDay:{
+        type:Sequelize.INTEGER
+    },
+    
     dueDay:{
         type: Sequelize.STRING
     },
@@ -45,10 +49,10 @@ const Timekeepings = db.define('timekeepings',
     editedAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
-    },
-    status: {
-        type: Sequelize.INTEGER
     }
+    // status: {
+    //     type: Sequelize.INTEGER
+    // }
 },
 {
     timestamps: false

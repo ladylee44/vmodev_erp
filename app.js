@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const bodyParser = require("body-parser");
 
 // const conn = require('./configdb/configdb');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(cors());
 
 const branchRoute = require('./routes/Branches.route');
 app.use('/erp', branchRoute);
@@ -33,7 +36,10 @@ app.use('/erp/', service_customer);
 const serviceRoute = require('./routes/Services.route');
 app.use('/erp', serviceRoute);
 
+<<<<<<< HEAD
 const salaryRoute = require('./routes/Salaries.route');
 app.use('/erp/', salaryRoute);
+=======
+>>>>>>> 3f37fd01be99a3b8334270584d9deeee5d9eae02
 
 module.exports = app;
