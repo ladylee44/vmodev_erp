@@ -53,7 +53,10 @@ const Employees = db.define('employees',
         type: Sequelize.STRING
     },
     imageUrl:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isUrl: true
+        }
     }, 
     createdBy: {
         type: Sequelize.STRING
