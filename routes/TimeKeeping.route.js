@@ -4,7 +4,7 @@ const controller = require('./../controllers/TimeKeeping.controller');
 
 timekeeping.get('/timekeeping/list', controller.list);
 
-// timekeeping.get('/timekeeping/listByMonth', controller.listByDate);
+timekeeping.get('/timekeeping/listByDate', controller.listByDate);
 
 timekeeping.get('/timekeeping/listByDay', controller.listByDay);
 

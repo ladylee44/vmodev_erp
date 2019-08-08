@@ -37,7 +37,7 @@ const Employees = db.define('employees',
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
-        validate: { 
+        validate: {     
             len: [10, 12]
         }
     },
@@ -80,4 +80,5 @@ const Employees = db.define('employees',
 Employees.belongsTo(Branches,{
     foreignKey: 'branchID'
 });
+
 module.exports = Employees;

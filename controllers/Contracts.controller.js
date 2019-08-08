@@ -1,10 +1,6 @@
 const Contracts = require("../models/Contracts.model");
 const Employees = require("../models/Employees.model");
 
-// contract.get('/contract/:contractid', controller.findContractByID);
-// contract.post('/contract', controller.createContract);
-// contract.put('/contract/:contractid', controller.updateContract);
-// contract.delete('/contract/:contractid', controller.deleteContract);
 
 // find contract by employeeID
 module.exports.findContractByID = (req, res, next) => {
@@ -44,6 +40,7 @@ module.exports.createContract = (req, res, next) => {
     editedAt: req.body.editedAt,
     status: req.body.status
   };
+  
   Contracts.create(newContract)
     .then(newContract => {
       if (newContract) {
@@ -82,8 +79,8 @@ module.exports.updateContract = (req, res, next) => {
     }
   })
     .then(() => {
-      res.status(201).json({
-        status: 201,
+      res.status(200).json({
+        status: 200,
         updateContract: updateContract
       });
     })

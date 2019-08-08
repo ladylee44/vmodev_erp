@@ -17,8 +17,11 @@ const Timekeepings = db.define('timekeepings',
             key: 'id'
         }
     },
-    numberWorkDay:{
-        type:Sequelize.INTEGER
+    date: {
+        type: Sequelize.STRING
+    },
+    workDay:{
+        type: Sequelize.DOUBLE(10,1)
     },
     
     dueDay:{

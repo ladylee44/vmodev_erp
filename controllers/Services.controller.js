@@ -1,6 +1,8 @@
 const Services = require('../models/Services.model');
+const ServiceDetails = require('../controllers/ServiceDetails.controller');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const db = require('./../configdb/configdb');
 
 // services.get('/services', controller.listServices);
 
@@ -12,6 +14,10 @@ const Op = Sequelize.Op;
 // List services
 module.exports.listServices = (req, res, next)=>{
     console.log('List service');
+    // ServiceDetails.findAll()
+    // .then(results=>{
+        
+    // })
     Services.findAll()
         .then(service=>{
             res.status(200).json({
@@ -28,16 +34,28 @@ module.exports.listServices = (req, res, next)=>{
             res.send('Err listing service: ' + err);
         })
 }
+// module.exports.listServices = (req, res, next)=>{
+//     console.log('List service');
 
-// services.get('/services/findByID/:serviceid', controller.findService);
+//     let sql = "SELECT services.id, branches.name AS branchName, services.name AS serviceName, services.description, service_details.materialPrice, service_details.payToEmployee, service_details.customerPay, services.createdBy, services.editedBy, services.createdAt, services.editedAt, services.status FROM services INNER JOIN service_details ON services.id = service_details.serviceID INNER JOIN branches ON services.branchID = branches.id";
+    
+//     db.query(sql, {
+//         type: db.QueryTypes.SELECT
+//     })
+//     .then(result =>{
+//         res.json({
+//             status: 200,
+//             listService: result
+//         })
+//     })
+//     .catch(err=>{
+//         res.send('Err listing service: '+ err);
+//     })
+// }
 // List services by ID
 module.exports.findService = (req, res, next)=>{
     console.log('Find Service by ID');
-    Services.findOne({
-        where: {
-            id: req.params.serviceid
-        }
-    })
+    Services.findAll()
     .then(service=>{
         if(service){
             res.status(200).json({
@@ -148,8 +166,8 @@ module.exports.updateService = (req, res, next)=>{
     })
     .then(service=>{
         if(service){
-            res.status(201).json({
-                status: 201,
+            res.status(200).json({
+                status: 200,
                 updateService: updateService
             })
         }else{
@@ -201,3 +219,18 @@ module.exports.deleteService = (req, res, next)=>{
         res.send('Cannot delete service: ' + err);
     })
 }
+
+module.exports.pagination = (req, res, next)=>{
+        var page = parseInt(req.params.page);
+        var result = parseInt((page-1)*5);
+        
+        Services.findAll({offset: result, limit: 10})
+        .then(data =>{
+            res.json({
+            service: data
+            });
+        })
+        .catch(err=>{
+            res.send('Err: ' +err);
+        });
+    }

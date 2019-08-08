@@ -17,6 +17,9 @@ module.exports = {
           //lấy thời gian check-in/check-out
           var check_in = result.checkIn;
           var check_out = result.checkOut;
+
+          var date = result.date;
+          // console.log(date)
           
           
           
@@ -58,7 +61,7 @@ module.exports = {
             workDay = 1;
           }
           
-          console.log(workDay)
+          // console.log(workDay)
           
           //chấm số ngày nghỉ
           var dayOff = 0;
@@ -68,7 +71,7 @@ module.exports = {
           
           timekeepings.update(
             {
-              numberWorkDay: workDay
+              workDay: workDay
             },
             {
               where: {
@@ -112,7 +115,7 @@ module.exports = {
                     checkIn: result.checkIn,
                     checkOut: result.checkOut,
                     timeWorking: timeWorking,
-                    numberWorkDay: workDay,
+                    workDay: workDay,
                     dayOff: dayOff,
                     overTime: parseFloat(overTime.toFixed(1)),
                   };
@@ -147,19 +150,15 @@ module.exports = {
           
           listByDay: (req, res,  next)=>{
             var day = req.body.day;
+            // console.log(day)
             var sql = 
             "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut, timekeepings.workTime, timekeepings.dayOff " +
-            "FROM timekeepings, employees, branches " 
+            "FROM timekeepings, employees, branches " +
             "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '"+ day+"'";
             db.query(sql, {type: db.QueryTypes.SELECT})
             .then(result=>{
               res.json({
-                name : SVGDefsElement,
-                date : [
-                  
-                ]
-                // day: day,
-                // result
+                result
               });
             });
           },
@@ -190,14 +189,38 @@ module.exports = {
           listByMonth: (req, res, next)=>{
             timekeepings.findAll()
             .then(result=>{
+              // res.send(result)
+              const arr = [];
               const response = {
                 timekeepings: result.map(rs=>{
-                  timekeepings.findAll().then
-                })
-              };
-              res.send({data : response});
-            })
-          }
-        };
-        
-        
+                  timekeepings.findAll({
+                    attributes: ['employeeID']
+                  })
+                  .then(rs=>{
+                    // console.log(rs),
+                    timekeepings.findAll(
+                      {attributes: ['checkIn', 'checkOut']},
+                      {where: {
+                        employeeID: rs,
+                        
+                      }})
+                      .then(data=>{
+                        // res.send(data)
+                        return {
+                          employeeID: rs,
+                          checkIn: data.checkIn,
+                          checkOut: data.checkOut
+                        }
+                      })
+                    })
+                    .then(dt=>{
+                      res.send(dt)
+                    })
+                  })
+                };
+                // res.send({data : response});
+              })
+            }
+          };
+          
+          
