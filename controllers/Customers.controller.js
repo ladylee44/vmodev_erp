@@ -2,6 +2,7 @@ const express = require("express");
 const customer = require("../models/Customers.model");
 const Sequelize= require('sequelize');
 const Op = Sequelize.Op;
+var db = require('../configdb/configdb');
 
 module.exports = {
   //show list of customer
@@ -75,17 +76,9 @@ module.exports = {
       }
     })
     .then(detail => {
-      const count = detail.length
-      if (!detail) {
-        res.json({
-          message: "Cannot find!"
-        });
-      } else {
-        res.status(200).json({
-          // message: 'Find '+ count+ ' result',
-          customerMatch: detail
-        });
-      }
+      res.send({
+        data: detail
+      })
     })
     .catch(err => {
       res.send(err);
@@ -158,17 +151,16 @@ module.exports = {
   pagination : (req, res, next)=>{
     var page = parseInt(req.params.page);
     var result = parseInt((page-1)*5);
-    
-    customer.findAll({offset: result, limit: 5})
-    .then(data =>{
-      res.json({
-        customer: data
-      });
+    customer.findAndCountAll({
+      offset: result,
+      limit: 5
     })
-    .catch(err=>{
-      res.json({
-        message: 'Error: '+err
+    .then(result => {
+      res.send({
+        totalPage: Math.ceil(result.count/5),
+        data: result.rows
       })
+      
     });
   }
 };

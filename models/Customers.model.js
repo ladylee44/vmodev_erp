@@ -16,10 +16,8 @@ var Customers = db.define('customers',
         }
     },
     dob: {
-        type: Sequelize.STRING,
-        validate: {
-            max: 50
-        }
+        type: Sequelize.STRING
+       
     },
     gender: {
         type: Sequelize.STRING,

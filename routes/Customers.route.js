@@ -6,7 +6,7 @@ customer.get('/customer/list', controller.list);
 
 customer.delete('/customer/delete/:id', controller.delete);
 
-// customer.get('/customer/searchCustomer/:id', controller.search);
+customer.get('/customer/searchByID/:id', controller.search);
 
 customer.get('/customer/search/:name', controller.searchByName)
 
