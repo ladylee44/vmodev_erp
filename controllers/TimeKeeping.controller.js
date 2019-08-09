@@ -5,35 +5,31 @@ const employees = require("../models/Employees.model");
 const db = require("../configdb/configdb");
 
 module.exports = {
-  
   list: (req, res, next) => {
-    timekeepings.findAll()
+    timekeepings
+    .findAll()
     .then(data => {
       // console.log(data)
       const response = {
         timekeepings: data.map(result => {
-          
           // console.log(result)
           //lấy thời gian check-in/check-out
           var check_in = result.checkIn;
           var check_out = result.checkOut;
-
+          
           var date = result.date;
           // console.log(date)
           
-          
-          
-          var hour_in =check_in.split(":",1);
+          var hour_in = check_in.split(":", 1);
           var hour_out = check_out.split(":", 1);
           
-          
-          var min_in =check_in.split(':', 2)[1];
-          var min_out =check_out.split(':', 2)[1];
+          var min_in = check_in.split(":", 2)[1];
+          var min_out = check_out.split(":", 2)[1];
           
           //thời gian làm việc
           var totalMin = 0;
           var totalHour = 0;
-          var workDay= 0
+          var workDay = 0;
           if (min_in > min_out) {
             totalMin = 60 - min_in + 60 - min_out;
             totalHour = hour_out - hour_in - 1;
@@ -52,7 +48,7 @@ module.exports = {
           }
           
           //chấm 1 công/ nửa công
-          var workDay=5;
+          var workDay = 5;
           if (totalHour < 4) {
             workDay = 0;
           } else if (totalHour == 4) {
@@ -117,7 +113,7 @@ module.exports = {
                     timeWorking: timeWorking,
                     workDay: workDay,
                     dayOff: dayOff,
-                    overTime: parseFloat(overTime.toFixed(1)),
+                    overTime: parseFloat(overTime.toFixed(1))
                   };
                 })
               };
@@ -133,14 +129,18 @@ module.exports = {
           },
           
           listByDate: (req, res, next) => {
-            var date_start= req.body.date_start;
-            var date_end = req.body.date_end
+            var date_start = req.body.date_start;
+            var date_end = req.body.date_end;
             // console.log(date_start);
             
             var sql =
             "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut " +
             "FROM timekeepings, employees, branches " +
-            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND ( timekeepings.date BETWEEN '"+ date_start+"' AND '"+date_end+"')";
+            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND ( timekeepings.date BETWEEN '" +
+            date_start +
+            "' AND '" +
+            date_end +
+            "')";
             db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
               res.json({
                 result
@@ -148,79 +148,85 @@ module.exports = {
             });
           },
           
-          listByDay: (req, res,  next)=>{
+          listByDay: (req, res, next) => {
             var day = req.body.day;
             // console.log(day)
-            var sql = 
+            var sql =
             "SELECT employees.name as employeeName, branches.name as branchName, timekeepings.checkIn, timekeepings.checkOut, timekeepings.workTime, timekeepings.dayOff " +
             "FROM timekeepings, employees, branches " +
-            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '"+ day+"'";
-            db.query(sql, {type: db.QueryTypes.SELECT})
-            .then(result=>{
+            "WHERE timekeepings.branchOfEmployee = branches.id AND timekeepings.employeeID=employees.id AND timekeepings.date = '" +
+            day +
+            "'";
+            db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
               res.json({
                 result
               });
             });
           },
           
-          createTimekeeping :(req, res, next)=>{
+          createTimekeeping: (req, res, next) => {
             var newTimekeeping = {
               employeeID: req.body.employeeID,
-              branchOfEmployee: req.body.branchOfEmployee,
-            }
-            timekeepings.create(newTimekeeping)
-            .then(result=>{
-              if(result){
+              branchOfEmployee: req.body.branchOfEmployee
+            };
+            timekeepings
+            .create(newTimekeeping)
+            .then(result => {
+              if (result) {
                 res.json({
-                  message: 'Create success',
+                  message: "Create success",
                   timeKeeping: result
-                })
-              }else{
+                });
+              } else {
                 res.json({
                   message: "Error in create timekeeping"
-                })
+                });
               }
             })
-            .catch(err=>{
-              res.send('Error: '+ err)
-            })
+            .catch(err => {
+              res.send("Error: " + err);
+            });
           },
           
-          listByMonth: (req, res, next)=>{
+          // listMonth: (req, res, next)=>{
+          //   timekeepings.findAll()
+          //   .then((questions) => {
+          //     const response = {
+          //       count : questions.length,
+          //       questions : questions.map(question =>{
+          //         const epl ={
+          //           data: data.map()
+          //         }
+          //         return {
+          //             employeeID : question.employeeID,
+          //             checkIn : question.checkIn,
+          //             checkOut : question.checkOut
+          //         }
+          //       })
+          //     }
+          //     res.status(200).send(response);
+          //   })
+          // }
+          
+          listMonth: (req, res, next) => {
             timekeepings.findAll()
-            .then(result=>{
-              // res.send(result)
-              const arr = [];
-              const response = {
-                timekeepings: result.map(rs=>{
-                  timekeepings.findAll({
-                    attributes: ['employeeID']
-                  })
-                  .then(rs=>{
-                    // console.log(rs),
-                    timekeepings.findAll(
-                      {attributes: ['checkIn', 'checkOut']},
-                      {where: {
-                        employeeID: rs,
-                        
-                      }})
-                      .then(data=>{
-                        // res.send(data)
-                        return {
-                          employeeID: rs,
-                          checkIn: data.checkIn,
-                          checkOut: data.checkOut
-                        }
-                      })
-                    })
-                    .then(dt=>{
-                      res.send(dt)
-                    })
-                  })
-                };
-                // res.send({data : response});
+            .then(result => {
+              console.log(result.length)
+              var employeeID = result[0].employeeID;
+              const response = result.map(item => {                
+                return {
+                  checkIn: item.checkIn,
+                  checkOut: item.checkOut
+                };                
               })
-            }
-          };
-          
-          
+
+              const employee = {
+                employeeID:employeeID,
+                data: response,
+              }
+
+              res.send(employee)
+            });
+          }
+        };
+        

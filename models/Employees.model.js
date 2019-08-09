@@ -38,7 +38,7 @@ const Employees = db.define('employees',
         allowNull: false,
         unique: true,
         validate: {     
-            len: [10, 12]
+            len: [5, 12]
         }
     },
     email:{
@@ -53,7 +53,10 @@ const Employees = db.define('employees',
         type: Sequelize.STRING
     },
     imageUrl:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isUrl: true
+        }
     }, 
     createdBy: {
         type: Sequelize.STRING

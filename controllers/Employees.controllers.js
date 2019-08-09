@@ -3,15 +3,7 @@ const Branches = require('./../models/Branches.model');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-// employees.get('/employee', controller.employeeList);
-// employees.get('/employee/findByID/:employeeid', controller.findEmployee);
-// employees.get('/employee/searchEmployee', controller.searchEmployeesByName);
-// employees.post('/employee', controller.addEmployee);
-// employees.put('/employee/:employeeid', controller.updateEmployee);
-// employees.delete('/employee/:employeeid', controller.deleteEmployee);
-
 // list employees
-// json example
 module.exports.employeeList = (req, res, next) => {
   console.log("List Employees");
   Employees.findAll({
@@ -87,7 +79,10 @@ module.exports.findEmployee = (req, res, next) => {
           // employee: empl['branch']
         });
       } else {
-        res.send("Employee not found");
+        res.status(404).json({
+          status: 404,
+          msg: "Employee not found"
+        })
       }
     })
     .catch(err => {
@@ -151,7 +146,7 @@ module.exports.addEmployee = (req, res, next) => {
   Employees.create(newEmpl)
     .then(newEmpl => {
       res.status(201).json({
-        status: 201,
+        status: 'Create employee successfully',
         newEmployee: newEmpl
       });
     })
@@ -185,11 +180,20 @@ module.exports.updateEmployee = (req, res, next) => {
       id: req.params.employeeid
     }
   })
-    .then(() => {
-      res.status(200).json({
-        status: 200,
-        updateEmployee: updateEmployee
-      });
+    .then(empl => {
+      // console.log(empl)
+      if(empl != 0){
+        res.status(200).json({
+          status: 'Update successfully',
+          updateEmployee: updateEmployee
+        });
+      } else {
+        res.status(404).json({
+          status: 404,
+          msg: 'Employee ID not found'
+        });
+      }
+      
     })
     .catch(err => {
       console.log("Error updating");
@@ -205,14 +209,22 @@ module.exports.deleteEmployee = (req, res, next) => {
       id: req.params.employeeid
     }
   })
-    .then(() => {
-      res.status(200).json({
-        status: "Delete successfully"
-      });
+    .then(empl => {
+      // console.log(empl);
+      if(empl){
+        res.status(200).json({
+          status: 'Delete successfully'
+        });
+      } else {
+        res.status(404).json({
+          status: 404,
+          msg: 'Employee ID not found'
+        })
+      }
     })
     .catch(err => {
       console.log("Error Delete");
-      res.send('Cannot delete employee' + err);
+      res.send('Cannot delete employee: ' + err);
     });
 };
 
