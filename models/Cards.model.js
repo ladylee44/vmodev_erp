@@ -12,6 +12,7 @@ var card = db.define('cards',{
 
     customerID: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         reference:{
             model: customer,
             key: 'id'
@@ -25,6 +26,7 @@ var card = db.define('cards',{
 
     type: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
             max: 50
         }
@@ -32,6 +34,7 @@ var card = db.define('cards',{
 
     totalPay: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         validate: {
             len: [0, 50]
         }

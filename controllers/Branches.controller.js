@@ -22,11 +22,11 @@ module.exports = {
       })
       .then(branches => {
         if (branches) {
-          res.json({
+          res.send({
             message: "Delete success branch at ID "+id
           });
         } else {
-          res.json({
+          res.send({
             message: "ID of branch is not existed"
           });
         }
@@ -67,17 +67,17 @@ module.exports = {
       })
       .then(updatedBranch => {
         if (updatedBranch == 0) {
-          res.json({
+          res.send({
             message: "ID is not existed"
           });
         } else {
-          res.json({
+          res.send({
             message: "Update success"
           });
         }
       })
       .catch(err => {
-        console.log("Error in update branch " + err);
+        ré.send("Error in update branch " + err);
       });
   },
 
@@ -104,12 +104,12 @@ module.exports = {
       .create(newBranch)
       .then(branches => {
         if (branches) {
-          res.json({
+          res.send({
             message: "Create success",
             data: branches
           });
         } else {
-          res.json({
+          res.send({
             message: "Error in create new branch"
           });
         }
@@ -126,11 +126,11 @@ module.exports = {
       .findOne({ where: { id: id } })
       .then(result => {
         if (!result) {
-          res.json({
+          res.send({
             message: "ID is not existed"
           });
         } else {
-          res.json({
+          res.send({
             branch: result
           });
         }
@@ -152,13 +152,13 @@ module.exports = {
     })
     .then(result =>{
       const count = result.length
-      res.json({
+      res.send({
         message: 'found '+count+' result',
         branchMatch: result
       })
     })
     .catch(err=>{
-      res.json({
+      res.send({
         message: 'Error '+err
       })
     })

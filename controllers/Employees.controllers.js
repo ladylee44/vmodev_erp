@@ -37,7 +37,9 @@ module.exports.employeeList = (req, res, next) => {
         //   status: 200,
         //   listEmployee: arrEmpl
         // });
-        res.status(200).send(arrEmpl);
+        res.status(200).send({
+          employee_list: arrEmpl
+        });
     })
     .catch(err => {
       res.send("Error listing err: " + err);

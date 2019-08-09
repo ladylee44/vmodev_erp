@@ -11,7 +11,7 @@ branches.put('/branch/update/:id', controller.update);
 
 branches.post('/branch/create', controller.create);
 
-// Branches.get('/branch/searchBranch/:id', controller.search);
+branches.get('/branch/searchByID/:id', controller.search);
 
 branches.get('/branch/search/:name', controller.searchByName);
 
