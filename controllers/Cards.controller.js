@@ -1,11 +1,17 @@
 const express = require("express");
 const card = require("../models/Cards.model");
+const customer = require('../models/Customers.model');
 
 module.exports = {
   // show list of cards
   list: (req, res, next) => {
     card
-    .findAll()
+    .findAll({
+      include: [{
+        model: customer,
+        attributes: ['name', 'dob', 'gender']
+      }]
+    })
     .then(card => {
       if (!card) {
         res.send("No card existed in databse");

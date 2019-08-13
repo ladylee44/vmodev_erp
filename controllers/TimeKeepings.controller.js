@@ -2,12 +2,18 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const timekeepings = require("../models/TimeKeepings.model");
 const employees = require("../models/Employees.model");
+const branch = require('../models/Branches.model')
 const db = require("../configdb/configdb");
 
 module.exports = {
   list: (req, res, next) => {
     timekeepings
-    .findAll()
+    .findAll({
+      include: [{
+        model: employees, branch,
+        attributes: ['branchID', 'name', 'dob', 'gender', 'role']
+      }]
+    })
     .then(data => {
       // console.log(data)
       const response = {
@@ -130,11 +136,12 @@ module.exports = {
                   })
                 };
                 res.send({
-                  Timekeeping: response
+                  // Timekeeping: response,
+                  timekeeping_data: data
                 });
               })
               .catch(err => {
-                res.json({
+                res.send({
                   message: "Error: " + err
                 });
               });
@@ -154,7 +161,7 @@ module.exports = {
               date_end +
               "')";
               db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
-                res.json({
+                res.send({
                   result
                 });
               });
@@ -170,7 +177,7 @@ module.exports = {
               day +
               "'";
               db.query(sql, { type: db.QueryTypes.SELECT }).then(result => {
-                res.json({
+                res.send({
                   result
                 });
               });
@@ -185,12 +192,12 @@ module.exports = {
               .create(newTimekeeping)
               .then(result => {
                 if (result) {
-                  res.json({
+                  res.send({
                     message: "Create success",
                     timeKeeping: result
                   });
                 } else {
-                  res.json({
+                  res.send({
                     message: "Error in create timekeeping"
                   });
                 }

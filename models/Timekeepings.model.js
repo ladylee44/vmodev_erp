@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../configdb/configdb');
-const Employees = require('../models/Employees.model');
+const Employees = require('./Employees.model');
 
 const Timekeepings = db.define('timekeepings', 
 {
@@ -18,7 +18,8 @@ const Timekeepings = db.define('timekeepings',
         }
     },
     date: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
     },
     workDay:{
         type: Sequelize.DOUBLE(10,1)
@@ -28,16 +29,22 @@ const Timekeepings = db.define('timekeepings',
         type: Sequelize.STRING
     },
     checkIn: {
-        type: Sequelize.DATE
+        type: Sequelize.TIME,
+        allowNull: false
     },
     checkOut: {
-        type: Sequelize.DATE
+        type: Sequelize.TIME,
+        allowNull: false
     },
     workTime: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10, 1),
+        allowNull: false
     },
     dayOff: {
         type: Sequelize.INTEGER
+    },
+    OT: {
+        type: Sequelize.DECIMAL(10,1)
     },
     createdBy: {
         type: Sequelize.STRING

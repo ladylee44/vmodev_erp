@@ -24,7 +24,7 @@ app.use('/erp', customerRoute);
 const employeeRoute = require('./routes/Employees.route');
 app.use('/erp', employeeRoute);
 
-const timekeepingRoute = require('./routes/TimeKeeping.route');
+const timekeepingRoute = require('./routes/TimeKeepings.route');
 app.use('/erp', timekeepingRoute);
 
 const serviceDetailsRoute = require('./routes/ServiceDetails.route');
