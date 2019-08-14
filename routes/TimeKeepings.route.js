@@ -8,6 +8,8 @@ timekeeping.get('/timekeeping/listByDate', controller.listByDate);
 
 timekeeping.get('/timekeeping/listByDay', controller.listByDay);
 
+timekeeping.post('/timekeeping/create', controller.createTimekeeping);
+
 // timekeeping.get('/timekeeping/listMonth', controller.listMonth);
 
 module.exports = timekeeping;

@@ -10,7 +10,7 @@ module.exports = {
     timekeepings
     .findAll({
       include: [{
-        model: employees, branch,
+        model: employees,
         attributes: ['branchID', 'name', 'dob', 'gender', 'role']
       }]
     })
@@ -18,7 +18,7 @@ module.exports = {
       // console.log(data)
       const response = {
         timekeepings: data.map(result => {
-          // console.log(result)
+          console.log(result.branchOfEmployee)
           //lấy thời gian check-in/check-out
           var check_in = result.checkIn;
           var check_out = result.checkOut;
@@ -54,13 +54,13 @@ module.exports = {
           };
           
           //chấm 1 công/ nửa công
-          var workDay = 5;
-          if (totalHour < 4) {
-            workDay = 0;
-          } else if (totalHour == 4) {
-            workDay = 0.5;
+          // var workDay = 5;
+          if (totalHour < 4.0) {
+             var workDay = 0;
+          } else if (totalHour == 4.0) {
+            var workDay = 0.5;
           } else {
-            workDay = 1;
+            var workDay = 1;
           }
           
           // console.log(workDay)
@@ -73,7 +73,7 @@ module.exports = {
           
           timekeepings.update(
             {
-              workDay: workDay
+              workDay: parseFloat(workDay)
             },
             {
               where: {
@@ -124,6 +124,7 @@ module.exports = {
                     //trả về kết quả
                     return {
                       employeeID: result.employeeID,
+                      branchOfEmployee: result.branchOfEmployee,
                       date: result.date,
                       checkIn: result.checkIn,
                       checkOut: result.checkOut,
@@ -186,7 +187,10 @@ module.exports = {
             createTimekeeping: (req, res, next) => {
               var newTimekeeping = {
                 employeeID: req.body.employeeID,
-                branchOfEmployee: req.body.branchOfEmployee
+                branchOfEmployee: req.body.branchOfEmployee,
+                date: req.body.date,
+                checkIn: req.body.checkIn,
+                checkOut: req.body.checkOut
               };
               timekeepings
               .create(newTimekeeping)
@@ -224,10 +228,10 @@ module.exports = {
             //   })
             // },
             
-            listMonth: (req, res, next) => {
+              listMonth: (req, res, next) => {
               timekeepings.findAll()
               .then(result => {
-                console.log(result.length)
+                console.log(result.length)  
                 var employeeID = result[3].employeeID;
                 const response = result.map(item => {                
                   return {
@@ -236,7 +240,7 @@ module.exports = {
                   };                
                 })
                 
-                const employee = {
+                const employee = {  
                   employeeID:employeeID,
                   data: response,
                 }
