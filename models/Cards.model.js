@@ -7,7 +7,7 @@ var card = db.define('cards',{
     id: {
         type: Sequelize.STRING,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
 
     customerID: {

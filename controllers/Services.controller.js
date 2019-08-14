@@ -14,8 +14,13 @@ const db = require('./../configdb/configdb');
 // List services
 module.exports.listServices = (req, res, next)=>{
     console.log('List service');
+<<<<<<< HEAD
+    Services.findAll()
+    .then(results=>{
+=======
     // ServiceDetails.findAll()
     // .then(results=>{
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
         
     // })
     Services.findAll()
@@ -132,7 +137,7 @@ module.exports.addService = (req, res, next)=>{
     Services.create(newService)
         .then(newService=>{
             res.status(201).json({
-                status: 201,
+                status: 'Create successfully',
                 newService: newService
             })
         })
@@ -167,7 +172,7 @@ module.exports.updateService = (req, res, next)=>{
     .then(service=>{
         if(service){
             res.status(200).json({
-                status: 200,
+                status: 'Update successfully',
                 updateService: updateService
             })
         }else{

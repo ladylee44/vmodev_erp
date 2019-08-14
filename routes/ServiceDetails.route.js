@@ -2,10 +2,10 @@ const express = require('express');
 const serviceDetails = express.Router();
 const controller = require('../controllers/ServiceDetails.controller');
 
-serviceDetails.get('/service/listServiceDetails', controller.listServiceDetails);
-serviceDetails.get('/service/listServiceDetails/:serviceid', controller.findServiceDetails);
-serviceDetails.post('/service/createServiceDetails', controller.createServiceDetails);
-serviceDetails.put('/service/updateServiceDetails/:serviceDetailsID', controller.updateServiceDetails);
-serviceDetails.delete('/service/deleteServiceDetails/:serviceDetailsID', controller.deleteServiceDetails);
+serviceDetails.get('/serviceDetails/list', controller.listServiceDetails);
+serviceDetails.get('/serviceDetails/list/:serviceid', controller.findServiceDetails);
+serviceDetails.post('/serviceDetails/create', controller.createServiceDetails);
+serviceDetails.put('/serviceDetails/update/:serviceDetailsID', controller.updateServiceDetails);
+serviceDetails.delete('/serviceDetails/delete/:serviceDetailsID', controller.deleteServiceDetails);
 
 module.exports = serviceDetails;

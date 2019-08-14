@@ -5,7 +5,7 @@ const Op = Sequelize.Op
 
 module.exports = {
   //show list branch
-  list: (req, res, next) => {
+  list: (req, res, next) => { 
     branches.findAll().then(branches => {
       res.status(200).send(branches);
     });

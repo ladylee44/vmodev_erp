@@ -1,21 +1,63 @@
 const Contracts = require("../models/Contracts.model");
 const Employees = require("../models/Employees.model");
 
+module.exports.listContract = (req, res, next)=>{
+  console.log('List contract');
+  Contracts.findAll({
+    include: [{
+      model: Employees,
+      attributes: ['id', 'name', 'dob', 'gender', 'address', 'idCard', 'email', 'role']
+    }]
+  })
+  .then(contract=>{
+    if(contract != 0){
+      res.json(contract);
+    } else {
+      res.json('Contract not found');
+    }
+  })
+  .catch(err=>{
+    res.send('Error listing contract: '  + err);
+  })
 
+}
 // find contract by employeeID
-module.exports.findContractByID = (req, res, next) => {
+module.exports.findContract = (req, res, next) => {
   console.log("Contract Detail");
   Contracts.findOne({
-    include: [Employees],
+    include: [{
+      model: Employees,
+      attributes: ['id', 'name', 'dob', 'gender', 'address', 'idCard', 'email', 'role']
+    }],
     where: {
-      employeeID: req.params.contractid
+      id: req.params.contractid
     }
   })
     .then(contract => {
       if (contract) {
         res.status(200).json({
           status: 200,
-          contract: contract
+          contract: {
+            id: contract['id'],
+            employee: {
+              EmployeeID: contract['employee'].id,
+              name: contract['employee'].name,
+              dob: contract['employee'].dob,
+              gender: contract['employee'].gender,
+              address: contract['employee'].address,
+              idCard: contract['employee'].idCard,
+              email: contract['employee'].email,
+              role: contract['employee'].role
+            },
+            applyFrom: contract['applyFrom'],
+            salary: contract['salary'],
+            createdBy: contract['createdBy'],
+            editedBy: contract['editedBy'],
+            createdAt: contract['createdAt'],
+            editedAt: contract['editedAt'],
+            status: contract['status']
+
+          }
         });
       } else {
         res.json({
@@ -32,6 +74,7 @@ module.exports.findContractByID = (req, res, next) => {
 module.exports.createContract = (req, res, next) => {
   const newContract = {
     employeeID: req.body.employeeID,
+    type: req.body.type,
     applyFrom: req.body.applyFrom,
     salary: req.body.salary,
     createdBy: req.body.createdBy,
@@ -45,7 +88,7 @@ module.exports.createContract = (req, res, next) => {
     .then(newContract => {
       if (newContract) {
         res.status(201).json({
-          status: 201,
+          status: 'Create contract successfully',
           newContract: newContract
         });
       }
@@ -65,6 +108,7 @@ module.exports.updateContract = (req, res, next) => {
   console.log("Updating contract ... ");
   const updateContract = {
     employeeID: req.body.employeeID,
+    type: req.body.type,
     applyFrom: req.body.applyFrom,
     salary: req.body.salary,
     createdBy: req.body.createdBy,
@@ -80,7 +124,7 @@ module.exports.updateContract = (req, res, next) => {
   })
     .then(() => {
       res.status(200).json({
-        status: 200,
+        status: 'Update contract successfully',
         updateContract: updateContract
       });
     })

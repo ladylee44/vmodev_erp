@@ -4,10 +4,6 @@ const Services = require('../models/Services.model');
 const Customers = require('../models/Customers.model');
 const ServiceDetails = require('../models/ServiceDetails.model');
 
-// services_customers.get('/services_customers/:service_customer_id', controller.findSerCus);
-// services_customers.post('/services_customers', controller.createSerCus);
-// services_customers.put('/services_customers/:service_customer_id', controller.updateSerCus);
-
 //  Service Customer 
 module.exports.findSerCus = (req, res, next)=>{
     console.log('Services Customers');
@@ -57,27 +53,30 @@ module.exports.createSerCus = (req, res, next)=>{
         include:[{
             model: Services,
             attributes: ['id']
-        }]
+        }],
+        where: {
+            serviceID: req.body.serviceID
+        }
     })
     .then(serviceDetails=>{
         serviceDetails.map(ser=>{
             return result = {
                 materialPrice: ser.materialPrice,
-                performPrice: ser.performPrice,
-                totalPrice: ser.totalPrice
+                payToEmployee: ser.payToEmployee,
+                customerPay: ser.customerPay
             }
         });
         console.log(result.materialPrice);
-        console.log(result.performPrice);
-        console.log(result.totalPrice);
+        console.log(result.payToEmployee);
+        console.log(result.customerPay);
 
         const newServiceCustomer = {
             serviceID: req.body.serviceID,
             customerID: req.body.customerID,
             employeeID:req.body.employeeID,
             materialPrice: result.materialPrice,
-            performPrice: result.performPrice,
-            totalPrice: result.totalPrice,
+            payToEmployee: result.payToEmployee,
+            customerPay: result.customerPay,
             startAt: req.body.startAt,
             endAt: req.body.endAt
         };
@@ -86,9 +85,11 @@ module.exports.createSerCus = (req, res, next)=>{
             .then(newServiceCustomer=>{
                 if(newServiceCustomer){
                     res.status(201).json({
-                        status: 201,
+                        status: 'Create successfully',
                         newServiceCustomer: newServiceCustomer
                     })
+                } else {
+                    res.send('Cannot find service ID');
                 }
             })
             .catch(err=>{
@@ -117,8 +118,8 @@ module.exports.updateSerCus = (req, res, next)=>{
         serviceDetails.map(ser=>{
             return result = {
                 materialPrice: ser.materialPrice,
-                performPrice: ser.performPrice,
-                totalPrice: ser.totalPrice
+                payToEmployee: ser.payToEmployee,
+                customerPay: ser.customerPay
             }
         });
         // console.log(result.materialPrice);
@@ -130,8 +131,8 @@ module.exports.updateSerCus = (req, res, next)=>{
             customerID: req.body.customerID,
             employeeID:req.body.employeeID,
             materialPrice: result.materialPrice,
-            performPrice: result.performPrice,
-            totalPrice: result.totalPrice,
+            payToEmployee: result.payToEmployee,
+            customerPay: result.customerPay,
             startAt: req.body.startAt,
             endAt: req.body.endAt
         };
@@ -143,7 +144,7 @@ module.exports.updateSerCus = (req, res, next)=>{
         })
             .then(()=>{
                 res.status(200).json({
-                    status: 200,
+                    status: 'Update successfully',
                     updateServiceCustomer: updateServiceCustomer
                 })
             })

@@ -31,6 +31,15 @@ module.exports = {
       }
     })
     .then(data => {
+<<<<<<< HEAD
+      if(data != 0){
+        res.json({
+          status: "Delete successfully"
+        });
+      } else {
+        res.json({
+          msg: "Customer not found"
+=======
       if(data==0){
         res.send({
           message: 'ID customer is not exist'
@@ -39,13 +48,19 @@ module.exports = {
         res.send({
           message: "Delete customer by id success",
           Customer_id: id
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
         });
       }
       
     })
     .catch(err => {
+<<<<<<< HEAD
+      res.json({
+        msg: "Error in delete customer by id " + err
+=======
       res.send({
         message: "Error in delete customer by id " + err
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
       });
     });
   },
@@ -59,12 +74,21 @@ module.exports = {
     })
     .then(detail => {
       if (!detail) {
+<<<<<<< HEAD
+        res.json({
+          msg: "ID of customer is not existed, please re-enter"
+        });
+      } else {
+        res.json({
+          customer: detail
+=======
         res.send({
           message: "ID of customer is not existed, please re-enter"
         });
       } else {
         res.send({
           detail_customer: detail
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
         });
       }
     })
@@ -87,10 +111,23 @@ module.exports = {
         }
       }
     })
+<<<<<<< HEAD
+    .then(results => {
+      if(detail != 0){
+        res.json({
+          data: results
+        })
+      } else {
+        res.json({
+          msg: 'No result'
+        })
+      }
+=======
     .then(detail => {
       res.send({
         detail_customer: detail
       });
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
     })
     .catch(err => {
       res.send({
@@ -115,8 +152,13 @@ module.exports = {
     if (customer) {
       customer.create(newCustomer)
       .then(result => {
+<<<<<<< HEAD
+        res.json({
+          customer: newCustomer
+=======
         res.send({
           new_customer: result
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
         });
       })
       .catch(err => {
@@ -149,12 +191,25 @@ module.exports = {
       where: { id: id }
     })
     .then(result => {
+<<<<<<< HEAD
+      if (result!=0) {
+        res.json({
+          status: "Update success",
+          customer: updateCustomer
+        });
+      } else {
+        res.json({
+          status: 404,
+          msg: "Customer not found"
+        });
+=======
       if (result) {
         res.send({
           message:'Update success'
         });
       } else {
         res.send("Failed to update");
+>>>>>>> 8aead691498ef7e3f69e9b868a135627e91ee474
       }
     })
     .catch(err => {
