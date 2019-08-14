@@ -11,36 +11,45 @@ var Customers = db.define('customers',
     },
     name: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
-            max: 50
+            len: [1, 20]
         }
     },
     dob: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            len: [3, 20]
+        }
+       
     },
     gender: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
-            max: 6
+            len: [4, 20]
         }
     },
     phone: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
             len: [10, 20]
         }
     },
     email: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
-            max: 50,
-            isEmail: true
+            len: [1, 20]
         }
     },
     address: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
-            max: 255
+            len: [1, 20]
         }
     },
     createdBy: {
@@ -65,8 +74,9 @@ var Customers = db.define('customers',
     },
     status:{
         type: Sequelize.INTEGER,
-        validate:{
-            max: 1
+        isNull: false,
+        validate: {
+           len: [1, 10],
         }
     }
 }, 

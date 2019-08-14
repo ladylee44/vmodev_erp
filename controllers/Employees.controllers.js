@@ -37,7 +37,9 @@ module.exports.employeeList = (req, res, next) => {
         //   status: 200,
         //   listEmployee: arrEmpl
         // });
-        res.status(200).send(arrEmpl);
+        res.status(200).send({
+          employee_list: arrEmpl
+        });
     })
     .catch(err => {
       res.send("Error listing err: " + err);
@@ -181,7 +183,7 @@ module.exports.updateEmployee = (req, res, next) => {
     }
   })
     .then(empl => {
-      console.log(empl)
+      // console.log(empl)
       if(empl != 0){
         res.status(200).json({
           status: 'Update successfully',

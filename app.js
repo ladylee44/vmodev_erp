@@ -36,7 +36,7 @@ app.use('/erp/', service_customer);
 const serviceRoute = require('./routes/Services.route');
 app.use('/erp', serviceRoute);
 
-const salaryRoute = require('./routes/Salaries.route');
-app.use('/erp/', salaryRoute);
+// const salaryRoute = require('./routes/Salaries.route');
+// app.use('/erp/', salaryRoute);
 
 module.exports = app;

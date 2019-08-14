@@ -37,8 +37,8 @@ const Employees = db.define('employees',
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
-        validate: { 
-            len: [10, 12]
+        validate: {     
+            len: [5, 12]
         }
     },
     email:{

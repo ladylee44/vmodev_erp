@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-var database = 'vmodev';
+var database = 'vmodev2';
 
 const sequelize = new Sequelize(database, 'root', '', {
     host: 'localhost',
