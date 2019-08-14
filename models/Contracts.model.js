@@ -17,6 +17,9 @@ const Contracts = db.define('contracts',
             key: 'id'
         }
     },
+    type:  {
+        type: Sequelize.STRING
+    },
     applyFrom:{
         type: Sequelize.STRING
     },

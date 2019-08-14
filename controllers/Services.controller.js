@@ -14,7 +14,7 @@ const db = require('./../configdb/configdb');
 // List services
 module.exports.listServices = (req, res, next)=>{
     console.log('List service');
-    ServiceDetails.findAll()
+    Services.findAll()
     .then(results=>{
         
     })
@@ -132,7 +132,7 @@ module.exports.addService = (req, res, next)=>{
     Services.create(newService)
         .then(newService=>{
             res.status(201).json({
-                status: 201,
+                status: 'Create successfully',
                 newService: newService
             })
         })
@@ -167,7 +167,7 @@ module.exports.updateService = (req, res, next)=>{
     .then(service=>{
         if(service){
             res.status(200).json({
-                status: 200,
+                status: 'Update successfully',
                 updateService: updateService
             })
         }else{

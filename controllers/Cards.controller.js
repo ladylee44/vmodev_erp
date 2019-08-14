@@ -7,8 +7,10 @@ module.exports = {
     card
       .findAll()
       .then(card => {
-        if (!card) {
-          res.send("No card existed in databse");
+        if (card == 0) {
+          res.json({
+            msg: "No card existed in databse"
+          });
         } else {
           res.json({
             card
@@ -50,8 +52,11 @@ module.exports = {
     };
     card
       .create(newCard)
-      .then(data => {
-        res.send(data);
+      .then(newCard=> {
+        res.json({
+          status: 201,
+          data: newCard
+        });
       })
       .catch(err => {
         res.send(err);
@@ -66,17 +71,25 @@ module.exports = {
       type: req.body.type,
       totalPay: req.body.totalPay,
       createdBy: req.body.createdBy,
-      editedby: req.body.editedBy,
+      editedBy: req.body.editedBy,
       status: req.body.status
     };
     card
       .update(updateCard, {
         where: { id: id }
       })
-      .then(data => {
-        res.json({
-          data
-        });
+      .then(card => {
+        if(card != 0){
+          res.json({
+            status: 'Update successfully',
+            data: updateCard
+          });
+        } else {
+          res.json({
+            status: 404,
+            msg: 'Card not found'
+          })
+        }
       })
       .catch(err => {
         res.send("Error in update card " + err);
@@ -93,11 +106,11 @@ module.exports = {
       .then(result => {
         if (!result) {
           res.json({
-            message: "ID is not exist"
+            message: "Card ID is not exist"
           });
         } else {
           res.json({
-            message: "Delete success"
+            message: "Delete successfully"
           });
         }
       })

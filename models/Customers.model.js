@@ -17,7 +17,6 @@ var Customers = db.define('customers',
     },
     dob: {
         type: Sequelize.STRING
-       
     },
     gender: {
         type: Sequelize.STRING,

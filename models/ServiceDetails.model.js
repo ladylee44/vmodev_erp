@@ -18,13 +18,13 @@ const ServiceDetails = db.define('service_details',
         }
     },
     materialPrice:{
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10,2)
     }, 
     payToEmployee: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10,2)
     },
     customerPay: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10,2)
     }
 }, 
 {

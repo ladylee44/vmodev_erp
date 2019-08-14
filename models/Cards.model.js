@@ -7,7 +7,7 @@ var card = db.define('cards',{
     id: {
         type: Sequelize.STRING,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
 
     customerID: {
@@ -72,6 +72,6 @@ var card = db.define('cards',{
     // {sequelize, modelName: 'customer'}
 );
 
-card.belongsTo(customer, {foreignKey: 'id'});
+card.belongsTo(customer, {foreignKey: 'customerID'});
 
 module.exports = card;

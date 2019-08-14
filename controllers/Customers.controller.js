@@ -28,14 +28,20 @@ module.exports = {
       }
     })
     .then(data => {
-      res.json({
-        message: "Delete customer by id success",
-        data
-      });
+      if(data != 0){
+        res.json({
+          status: "Delete successfully"
+        });
+      } else {
+        res.json({
+          msg: "Customer not found"
+        });
+      }
+      
     })
     .catch(err => {
       res.json({
-        message: "Error in delete customer by id " + err
+        msg: "Error in delete customer by id " + err
       });
     });
   },
@@ -50,11 +56,11 @@ module.exports = {
     .then(detail => {
       if (!detail) {
         res.json({
-          message: "ID of customer is not existed, please re-enter"
+          msg: "ID of customer is not existed, please re-enter"
         });
       } else {
         res.json({
-          detail
+          customer: detail
         });
       }
     })
@@ -75,10 +81,16 @@ module.exports = {
         }
       }
     })
-    .then(detail => {
-      res.send({
-        data: detail
-      })
+    .then(results => {
+      if(detail != 0){
+        res.json({
+          data: results
+        })
+      } else {
+        res.json({
+          msg: 'No result'
+        })
+      }
     })
     .catch(err => {
       res.send(err);
@@ -103,7 +115,7 @@ module.exports = {
       .create(newCustomer)
       .then(result => {
         res.json({
-          customer: result
+          customer: newCustomer
         });
       })
       .catch(err => {
@@ -134,10 +146,16 @@ module.exports = {
       where: { id: id }
     })
     .then(result => {
-      if (result) {
-        res.json("Update success");
+      if (result!=0) {
+        res.json({
+          status: "Update success",
+          customer: updateCustomer
+        });
       } else {
-        res.json("Failed to update");
+        res.json({
+          status: 404,
+          msg: "Customer not found"
+        });
       }
     })
     .catch(err => {
