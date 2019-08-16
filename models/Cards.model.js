@@ -16,12 +16,7 @@ var card = db.define('cards',{
         reference:{
             model: customer,
             key: 'id'
-        },
-        unique: {
-            args: true,
-            message: 'Username must be unique.',
-            // fields: [connect.fn('lower', connect.col('username'))]
-        },
+        }
     },
 
     type: {

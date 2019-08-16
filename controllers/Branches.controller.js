@@ -77,7 +77,7 @@ module.exports = {
         }
       })
       .catch(err => {
-        ré.send("Error in update branch " + err);
+        res.send("Error in update branch " + err);
       });
   },
 
@@ -162,5 +162,22 @@ module.exports = {
         message: 'Error '+err
       })
     })
+  },
+
+  //pagination
+  pagination: (req, res, next) => {
+    var page = parseInt(req.params.page);
+    var result = parseInt((page - 1) * 5);
+    branches
+    .findAndCountAll({
+      offset: result,
+      limit: 5
+    })
+    .then(result => {
+      res.send({
+        totalPage: Math.ceil(result.count / 5),
+        data: result.rows
+      });
+    });
   }
 };

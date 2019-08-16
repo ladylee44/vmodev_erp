@@ -15,4 +15,6 @@ branches.get('/branch/searchByID/:id', controller.search);
 
 branches.get('/branch/search/:name', controller.searchByName);
 
+branches.get('/branch/pagination/:page', controller.pagination);
+
 module.exports = branches;

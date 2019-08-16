@@ -4,12 +4,12 @@ const controller = require('../controllers/TimeKeepings.controller');
 
 timekeeping.get('/timekeeping/list', controller.list);
 
-timekeeping.get('/timekeeping/listByDate', controller.listByDate);
+timekeeping.get('/timekeeping/listByDate', controller.listByDateRange);
 
 timekeeping.get('/timekeeping/listByDay', controller.listByDay);
 
 timekeeping.post('/timekeeping/create', controller.createTimekeeping);
 
-// timekeeping.get('/timekeeping/listMonth', controller.listMonth);
+timekeeping.get('/timekeeping/listMonth', controller.listMonth);
 
 module.exports = timekeeping;
